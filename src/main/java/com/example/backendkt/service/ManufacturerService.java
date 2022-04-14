@@ -44,6 +44,10 @@ public class ManufacturerService {
 
     @Transactional(readOnly = true)
     public List<CarEntity> getCarsByManufacturer(ManufacturerEntity entity) {
+       // ???
+//        carRepository.findByManufacturer(entity).stream().findFirst()
+//                .orElseThrow(() -> new exceptionNotFound("Производитель с id " + entity.getId() + " не найден"));
+
         return carRepository.findByManufacturer(entity);
     }
 

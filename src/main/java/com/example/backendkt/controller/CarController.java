@@ -2,10 +2,12 @@ package com.example.backendkt.controller;
 
 import com.example.backendkt.dto.CarDto;
 import com.example.backendkt.dto.CreateUpdateCarDto;
+import com.example.backendkt.dto.FetchCarDto;
 import com.example.backendkt.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +24,11 @@ public class CarController {
     @GetMapping("/{id}")
     public CarDto getById(@PathVariable UUID id) {
         return carService.getDtoById(id.toString());
+    }
+
+    @GetMapping("/fetch")
+    public List<CarDto> getById(@RequestBody FetchCarDto dto) {
+        return carService.fetchCars(dto);
     }
 
 }
