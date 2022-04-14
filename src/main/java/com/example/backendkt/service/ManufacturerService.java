@@ -8,6 +8,7 @@ import com.example.backendkt.dto.converter.ManufacturerConverterDto;
 import com.example.backendkt.entity.CarEntity;
 import com.example.backendkt.entity.ManufacturerEntity;
 import com.example.backendkt.exception.exceptionNotFound;
+import com.example.backendkt.exception.exceptionNotUnique;
 import com.example.backendkt.repository.CarRepository;
 import com.example.backendkt.repository.ManufacturerRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,16 @@ public class ManufacturerService {
 
     @Transactional
     public ManufacturerDtoWithoutCars save(CreateUpdateManufacturerDto dto){
+        if (!(manufacturerRepository.findByName(dto.getName()).size() == 0)){
+            throw new exceptionNotUnique("Название " + dto.getName() + " уже используется");
+        }
+
         ManufacturerEntity entity = ManufacturerConverterDto.convertDtoToEntity(dto);
         var savedEntity = manufacturerRepository.save(entity);
         return ManufacturerConverterDto.convertEntityToDtoWithoutCars(savedEntity);
     }
+
+
 
     @Transactional(readOnly = true)
     public ManufacturerDto getDtoById(String id){
