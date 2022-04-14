@@ -1,4 +1,9 @@
 spring:
+  flyway:
+    locations: classpath:migrations
+    url: jdbc:postgresql://localhost:5432/test_java_22_1
+    user: test_java_22_1
+    password: test_java_22_1
   datasource:
     url: jdbc:postgresql://localhost:5432/test_java_22_1
     username: test_java_22_1
@@ -6,7 +11,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
 
 server:
   port: 8191
