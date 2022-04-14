@@ -2,25 +2,24 @@ package com.example.backendkt.service;
 
 import com.example.backendkt.dto.CarDto;
 import com.example.backendkt.dto.CreateUpdateCarDto;
+import com.example.backendkt.dto.CreateUpdateManufacturerDto;
 import com.example.backendkt.dto.FetchCarDto;
 import com.example.backendkt.dto.converter.CarDtoConverter;
+import com.example.backendkt.dto.converter.ManufacturerConverterDto;
 import com.example.backendkt.entity.CarEntity;
 import com.example.backendkt.entity.ManufacturerEntity;
 import com.example.backendkt.exception.exceptionNotFound;
 import com.example.backendkt.repository.CarRepository;
+import com.example.backendkt.repository.ManufacturerRepository;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final ManufacturerService manufacturerService;
+    private final ManufacturerRepository manufacturerRepository;
 
     @Transactional
     public CarDto save(CreateUpdateCarDto dto) {
@@ -43,8 +43,22 @@ public class CarService {
 
     @Transactional
     public void initCsv() {
+        manufacturerRepository.deleteAll();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("manufacturers.csv");
+        var manufacturers = new CsvToBeanBuilder<CreateUpdateManufacturerDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
+                .withSeparator(',')
+                .withType(CreateUpdateManufacturerDto.class)
+                .withSkipLines(1)
+                .build()
+                .parse();
+
+        manufacturers.forEach(elem->{
+            ManufacturerEntity entity = ManufacturerConverterDto.convertDtoToEntity(elem);
+            manufacturerRepository.save(entity);
+        });
+
         carRepository.deleteAll();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("cars.csv");
+        inputStream = getClass().getClassLoader().getResourceAsStream("cars.csv");
         var data = new CsvToBeanBuilder<CreateUpdateCarDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
                 .withSeparator(',')
                 .withType(CreateUpdateCarDto.class)

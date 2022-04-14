@@ -39,22 +39,22 @@ public class ManufacturerService {
         return ManufacturerConverterDto.convertEntityToDtoWithoutCars(savedEntity);
     }
 
-    @Transactional
-    public void initCsv() {
-        manufacturerRepository.deleteAll();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("manufacturers.csv");
-        var manufacturers = new CsvToBeanBuilder<CreateUpdateManufacturerDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
-                .withSeparator(',')
-                .withType(CreateUpdateManufacturerDto.class)
-                .withSkipLines(1)
-                .build()
-                .parse();
-
-        manufacturers.forEach(elem->{
-            ManufacturerEntity entity = ManufacturerConverterDto.convertDtoToEntity(elem);
-            manufacturerRepository.save(entity);
-        });
-    }
+//    @Transactional
+//    public void initCsv() {
+//        manufacturerRepository.deleteAll();
+//        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("manufacturers.csv");
+//        var manufacturers = new CsvToBeanBuilder<CreateUpdateManufacturerDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
+//                .withSeparator(',')
+//                .withType(CreateUpdateManufacturerDto.class)
+//                .withSkipLines(1)
+//                .build()
+//                .parse();
+//
+//        manufacturers.forEach(elem->{
+//            ManufacturerEntity entity = ManufacturerConverterDto.convertDtoToEntity(elem);
+//            manufacturerRepository.save(entity);
+//        });
+//    }
 
     @Transactional(readOnly = true)
     public ManufacturerDto getDtoById(String id) {

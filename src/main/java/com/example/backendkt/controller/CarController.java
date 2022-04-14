@@ -26,7 +26,7 @@ public class CarController {
 
     @PostMapping("/init")
     public void initCsv() {
-        manufacturerService.initCsv();
+//        manufacturerService.initCsv();
         carService.initCsv();
     }
 
