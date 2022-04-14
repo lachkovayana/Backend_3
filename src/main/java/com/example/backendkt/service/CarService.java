@@ -8,17 +8,21 @@ import com.example.backendkt.entity.CarEntity;
 import com.example.backendkt.entity.ManufacturerEntity;
 import com.example.backendkt.exception.exceptionNotFound;
 import com.example.backendkt.repository.CarRepository;
+import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +39,24 @@ public class CarService {
         entity = carRepository.save(entity);
 
         return CarDtoConverter.convertEntityToDto(entity);
+    }
+
+    @Transactional
+    public void initCsv() {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("cars.csv");
+        var data = new CsvToBeanBuilder<CreateUpdateCarDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
+                .withSeparator(',')
+                .withType(CreateUpdateCarDto.class)
+                .withSkipLines(1)
+                .build()
+                .parse();
+
+        data.forEach(elem->{
+            ManufacturerEntity manufacturer = manufacturerService.getEntityByName(elem.getManufacturer());
+            CarEntity entity = CarDtoConverter.convertDtoToEntity(elem, manufacturer);
+            carRepository.save(entity);
+
+        });
     }
 
     @Transactional(readOnly = true)
