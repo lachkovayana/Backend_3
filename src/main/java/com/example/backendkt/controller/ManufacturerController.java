@@ -5,6 +5,7 @@ import com.example.backendkt.dto.ManufacturerDto;
 import com.example.backendkt.dto.ManufacturerDtoWithoutCars;
 import com.example.backendkt.service.ManufacturerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class ManufacturerController {
     private final ManufacturerService manufacturerService;
 
     @PostMapping
-    public ManufacturerDtoWithoutCars save(@RequestBody CreateUpdateManufacturerDto createUpdateProjectDto) {
+    public ManufacturerDtoWithoutCars save(@Validated @RequestBody CreateUpdateManufacturerDto createUpdateProjectDto) {
         return manufacturerService.save(createUpdateProjectDto);
     }
 

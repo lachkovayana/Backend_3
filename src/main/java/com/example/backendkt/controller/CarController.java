@@ -6,6 +6,7 @@ import com.example.backendkt.dto.FetchCarDto;
 import com.example.backendkt.service.CarService;
 import com.example.backendkt.service.ManufacturerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class CarController {
     private final ManufacturerService manufacturerService;
 
     @PostMapping
-    public CarDto save(@RequestBody CreateUpdateCarDto createUpdateCarDto) {
+    public CarDto save(@Validated @RequestBody CreateUpdateCarDto createUpdateCarDto) {
         return carService.save(createUpdateCarDto);
     }
 

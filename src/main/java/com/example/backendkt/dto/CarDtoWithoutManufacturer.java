@@ -6,5 +6,5 @@ import lombok.Data;
 public class CarDtoWithoutManufacturer {
     private String id;
     private String carModel;
-    private int releaseYear;
+    private Integer releaseYear;
 }
