@@ -2,11 +2,8 @@ package com.example.backendkt.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ManufacturerDto {
+public class ManufacturerDtoWithoutCars {
     private String id;
     private String name;
-    private List<CarDtoWithoutManufacturer> cars;
 }

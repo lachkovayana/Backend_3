@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CarDto {
     private String id;
-    private String model;
-    private  int year;
-    private String manufacturerId;
+    private String carModel;
+    private int releaseYear;
+    private String manufacturer;
 }
