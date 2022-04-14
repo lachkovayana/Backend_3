@@ -43,6 +43,7 @@ public class CarService {
 
     @Transactional
     public void initCsv() {
+        carRepository.deleteAll();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("cars.csv");
         var data = new CsvToBeanBuilder<CreateUpdateCarDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
                 .withSeparator(',')
@@ -51,7 +52,7 @@ public class CarService {
                 .build()
                 .parse();
 
-        data.forEach(elem->{
+        data.forEach(elem -> {
             ManufacturerEntity manufacturer = manufacturerService.getEntityByName(elem.getManufacturer());
             CarEntity entity = CarDtoConverter.convertDtoToEntity(elem, manufacturer);
             carRepository.save(entity);

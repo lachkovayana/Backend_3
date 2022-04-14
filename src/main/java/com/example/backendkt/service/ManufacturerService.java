@@ -41,6 +41,7 @@ public class ManufacturerService {
 
     @Transactional
     public void initCsv() {
+        manufacturerRepository.deleteAll();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("manufacturers.csv");
         var manufacturers = new CsvToBeanBuilder<CreateUpdateManufacturerDto>(new InputStreamReader(Objects.requireNonNull(inputStream)))
                 .withSeparator(',')
@@ -49,7 +50,10 @@ public class ManufacturerService {
                 .build()
                 .parse();
 
-        manufacturers.forEach(this::save);
+        manufacturers.forEach(elem->{
+            ManufacturerEntity entity = ManufacturerConverterDto.convertDtoToEntity(elem);
+            manufacturerRepository.save(entity);
+        });
     }
 
     @Transactional(readOnly = true)
